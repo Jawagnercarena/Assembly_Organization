@@ -99,12 +99,18 @@ def get_tables_and_mappings(online=True):
     # Load assembly and coregistration data, and create useful mappings
     v1DD_session13_SGC_ASSEMBLIES = scipy.io.loadmat("./esteps_150000_affinity_04_sessionM409828_13_SGC-ASSEMBLIES.mat", struct_as_record=True, squeeze_me=True)
 
-    ### JULIAN EDIT: REORDER ASSEMBLIES AND 1 INDEX ASSEMBLIES
+    ### JULIAN EDIT: REORDER ASSEMBLIES
+    ordered_assemblies = sorted(v1DD_session13_SGC_ASSEMBLIES["assemblies"], key = len)
+    ordered_assemblies.reverse()
 
     # Get the functional indexes of neurons involved in each assembly
     functional_indexes_by_assembly = {}
-    for assembly_idx in range(len(v1DD_session13_SGC_ASSEMBLIES['assemblies'])):
-        functional_indexes_by_assembly[assembly_idx] = v1DD_session13_SGC_ASSEMBLIES['assemblies'][assembly_idx] # - 1
+    for assembly_idx in range(len(ordered_assemblies)):
+        ### JULIAN EDIT: You need to correct the funcitonal indexes by making them 0-indexed
+        # since SGC originally worked in MATLAB. This will be imperative when dealing with other
+        # python files.
+        ### JULIAN EDIT: 1-INDEX ASSEMBLIES FOR EASE-OF-PLOTTING PURPOSES
+        functional_indexes_by_assembly[assembly_idx + 1] = ordered_assemblies[assembly_idx] - 1
 
     # Construct a mapping from the functional index to the roi_id
     assemblies_by_functional_index = invert_dict(functional_indexes_by_assembly)
