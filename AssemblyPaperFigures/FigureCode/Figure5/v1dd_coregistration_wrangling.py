@@ -90,7 +90,7 @@ def map_dict_keys(key_mapping_dict, dict_to_update):
     for key, val in dict_to_update.items():
         new_key = key_mapping_dict.get(key)
         if new_key is None:
-            print('None!')
+            continue
         else:
             updated_dict[new_key] = val
     return updated_dict #{key_mapping_dict.get(key): val for key, val in dict_to_update.items()}
