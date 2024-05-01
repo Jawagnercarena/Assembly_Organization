@@ -86,8 +86,14 @@ def invert_dict(original_dict):
     return inverted_dict
 
 def map_dict_keys(key_mapping_dict, dict_to_update):
-    return {key_mapping_dict.get(key): val for key, val in dict_to_update.items()}
-
+    updated_dict = {}
+    for key, val in dict_to_update.items():
+        new_key = key_mapping_dict.get(key)
+        if new_key is None:
+            print('None!')
+        else:
+            updated_dict[new_key] = val
+    return updated_dict #{key_mapping_dict.get(key): val for key, val in dict_to_update.items()}
 
 def get_tables_and_mappings(online=True, include_assemblies=True):
     # Load cell table and add full connectome ID column
@@ -113,8 +119,9 @@ def get_tables_and_mappings(online=True, include_assemblies=True):
         functional_indexes_by_assembly = {}
         all_assembly_functional_indexes = []
         for assembly_idx in range(len(v1DD_session13_SGC_ASSEMBLIES['assemblies'])):
-            functional_indexes_by_assembly[f'A {assembly_idx+1}'] = list(np.subtract(v1DD_session13_SGC_ASSEMBLIES['assemblies'][assembly_idx], 1))
-            all_assembly_functional_indexes += list(np.subtract(v1DD_session13_SGC_ASSEMBLIES['assemblies'][assembly_idx], 1))
+            one_indexed_temp = list(np.subtract(v1DD_session13_SGC_ASSEMBLIES['assemblies'][assembly_idx], 1))
+            functional_indexes_by_assembly[f'A {assembly_idx+1}'] = one_indexed_temp
+            all_assembly_functional_indexes += one_indexed_temp
         functional_indexes_by_assembly['No A'] = list(set(range(calcium_fluorescence.shape[1])) - set(all_assembly_functional_indexes))
         assemblies_by_functional_index = invert_dict(functional_indexes_by_assembly)
 
@@ -122,6 +129,7 @@ def get_tables_and_mappings(online=True, include_assemblies=True):
     roi_id_temp = pandas.DataFrame(np.load('sessionM409828_13_roi_id_by_index.npy'))
     roi_id_temp['functional_index'] = roi_id_temp.index
     roi_id_temp['roi_id'] = roi_id_temp[0]
+    roi_id_temp['roi_id'] = roi_id_temp['roi_id'].apply(lambda x: x[0:5] + str(int(x[5])+1) + x[6:])
     functional_index_to_roi_id_mapping = dict(roi_id_temp[['functional_index', 'roi_id']].values)
 
     if not online:
@@ -170,3 +178,14 @@ def get_tables_and_mappings(online=True, include_assemblies=True):
         #         }
     return tables, mappings
 
+## Testing code below
+# tables, mappings = get_tables_and_mappings(online=True)
+# assemblies_by_coregistered = invert_dict(tables['assemblies_by_connectome_id'])
+ 
+# counter = 0
+# for val in assemblies_by_coregistered.values():
+#     if val != [None]:
+#         counter += len(val)
+# print("Total Number of Neurons that are Coregistered & Assigned to Assemblies or the None Assemlby Set:", counter)
+# for key, val in assemblies_by_coregistered.items():
+#     print(key, val)
