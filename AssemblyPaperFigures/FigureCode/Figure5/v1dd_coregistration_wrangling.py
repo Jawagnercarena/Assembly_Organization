@@ -141,31 +141,31 @@ def get_tables_and_mappings(online=True, include_assemblies=True):
     roi_id_to_pt_root_id_mapping = dict(coregistration_table[['roi_id', 'pt_root_id']].values)
 
     # Map from root ID to connectome ID, and visa-versa
-    connectome_id_to_root_id_mapping = dict(cell_table[['full_connectome_index', 'pt_root_id']].values)
-    root_id_to_connectome_id_mapping = dict(cell_table[['pt_root_id', 'full_connectome_index']].values)
+    connectome_index_to_root_id_mapping = dict(cell_table[['full_connectome_index', 'pt_root_id']].values)
+    root_id_to_connectome_index_mapping = dict(cell_table[['pt_root_id', 'full_connectome_index']].values)
 
     if include_assemblies:
         assemblies_by_roi_id = map_dict_keys(key_mapping_dict=functional_index_to_roi_id_mapping, dict_to_update=assemblies_by_functional_index)
         assemblies_by_pt_root_id = map_dict_keys(key_mapping_dict=roi_id_to_pt_root_id_mapping, dict_to_update=assemblies_by_roi_id)
-        assemblies_by_connectome_id = map_dict_keys(key_mapping_dict=root_id_to_connectome_id_mapping, dict_to_update=assemblies_by_pt_root_id)
+        assemblies_by_connectome_index = map_dict_keys(key_mapping_dict=root_id_to_connectome_index_mapping, dict_to_update=assemblies_by_pt_root_id)
 
-        mappings = {'pt_root_id_to_connectome_id' : root_id_to_connectome_id_mapping,
-                    'connectome_id_to_root_id': connectome_id_to_root_id_mapping,
+        mappings = {'pt_root_id_to_connectome_index' : root_id_to_connectome_index_mapping,
+                    'connectome_index_to_root_id': connectome_index_to_root_id_mapping,
                     'roi_id_to_pt_root_id': roi_id_to_pt_root_id_mapping,
                     'functional_index_to_roi_id': functional_index_to_roi_id_mapping,
                     }
         
         tables = {'assemblies_by_roi_id' : assemblies_by_roi_id,
                 'assemblies_by_pt_root_id' : assemblies_by_pt_root_id,
-                'assemblies_by_connectome_id' : assemblies_by_connectome_id,
+                'assemblies_by_connectome_index' : assemblies_by_connectome_index,
                 'assemblies_by_functional_index' : assemblies_by_functional_index,
                 'functional_indexes_by_assembly' : functional_indexes_by_assembly,
                 'coregistration' : coregistration_table,
                 'cell' : cell_table
                 }
     else:
-        mappings = {'pt_root_id_to_connectome_id' : root_id_to_connectome_id_mapping,
-                    'connectome_id_to_root_id': connectome_id_to_root_id_mapping,
+        mappings = {'pt_root_id_to_connectome_index' : root_id_to_connectome_index_mapping,
+                    'connectome_index_to_root_id': connectome_index_to_root_id_mapping,
                     'roi_id_to_pt_root_id': roi_id_to_pt_root_id_mapping,
                     'functional_index_to_roi_id': functional_index_to_roi_id_mapping,
                     }
@@ -180,7 +180,7 @@ def get_tables_and_mappings(online=True, include_assemblies=True):
 
 ## Testing code below
 # tables, mappings = get_tables_and_mappings(online=True)
-# assemblies_by_coregistered = invert_dict(tables['assemblies_by_connectome_id'])
+# assemblies_by_coregistered = invert_dict(tables['assemblies_by_connectome_index'])
  
 # counter = 0
 # for val in assemblies_by_coregistered.values():
