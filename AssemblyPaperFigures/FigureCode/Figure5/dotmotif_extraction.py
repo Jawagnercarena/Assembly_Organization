@@ -61,5 +61,5 @@ four_chain = Motif("""
 
 four_chain_results = executor.find(four_chain)
 print('\n\t',len(four_chain_results))
-with open('results/pyc_four_chain_results.pickle', 'wb') as out_file:
+with open('dot_motif_results/pyc_four_chain_results.pickle', 'wb') as out_file:
     pickle.dump(four_chain_results, out_file)
