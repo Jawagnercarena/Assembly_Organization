@@ -39,6 +39,8 @@ mappings = my_data.mappings
 
 ground_truth_connectome_v1dd = calc_ground_truth(tables['structural']['pre_cell'], tables['structural']['synapse'], tables['structural']['post_cell'])
 adjacency_matrix = ground_truth_connectome_v1dd.clip(0,1)
+# Ensure that the diagonal is filled with zeros
+np.fill_diagonal(adjacency_matrix, 0)
 pyr_graph = nx.from_numpy_array(adjacency_matrix, create_using=nx.DiGraph)
 
 # Extracts Three Chain Motifs
@@ -52,14 +54,14 @@ print('\n\t',len(three_chain_results))
 with open('dot_motif_results/pyc_three_chain_results.pickle', 'wb') as out_file:
     pickle.dump(three_chain_results, out_file)
 
-# Extracts Four Chain Motifs
-four_chain = Motif("""
-                A -> B
-                B -> C
-                C -> D
-              """)
+# # Extracts Four Chain Motifs
+# four_chain = Motif("""
+#                 A -> B
+#                 B -> C
+#                 C -> D
+#               """)
 
-four_chain_results = executor.find(four_chain)
-print('\n\t',len(four_chain_results))
-with open('dot_motif_results/pyc_four_chain_results.pickle', 'wb') as out_file:
-    pickle.dump(four_chain_results, out_file)
+# four_chain_results = executor.find(four_chain)
+# print('\n\t',len(four_chain_results))
+# with open('dot_motif_results/pyc_four_chain_results.pickle', 'wb') as out_file:
+#     pickle.dump(four_chain_results, out_file)
