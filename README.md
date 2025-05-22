@@ -7,6 +7,8 @@ First, ensure that anaconda (conda) is installed on your system.
 Then, to create the environment and install the conda and pip packages, at a command prompt execute `conda env create -n HebbsVision -f conda_files.yaml`
 In the case of failure installing NeuroAnalysisTools, due to the lack of `requirements.txt`, you must create the environment first then download NeuroAnalysisTools from `https://github.com/zhuangjun1981/NeuroAnalysisTools`.  Once it exists in a local directory, you can install it locally from pip with `pip install -e ./<path_to_NeuroAnalysisTools>.`  The same workaround can be employed with V1DD-Physiology if a similar error occurs.
 
+The LSMM library must be installed via a local wheel file at the moment, and the .whl is included in the root of the repository.  Install it with `pip install lsmm_data-0.1.2-py2.py3-none-any.whl`
+
 ## Assembly Extraction and Hyperparameter Tuning (Optional):
 Note that this step can take some time, so for those simply interested in reproducing our analysis of the extracted assemblies, the HebbsVision repository includes all the hyperparameter files that were generated using Scan 1-4 data following the instructions in Molter et al. 2024: "Similarity Graph Clustering for Neural Assembly Detection" p. 175, and we also include the file generated from Scan 1-3 (the scan on which the remaining analysis is focused) using the selected best hyperparameters.
 
